@@ -29,7 +29,7 @@ export function PersonaPicker() {
             <AnimatePresence mode="popLayout">
               {personas[i].links.map((l0, k) => { const tl = t.content.personaLinks?.[i]?.[k]; const l = tl ? { ...l0, title: tl[0], note: tl[1] } : l0; return (
                 <motion.div key={i + '-' + l.title} initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0, transition: { delay: k * 0.05, duration: 0.35, ease } }} exit={{ opacity: 0, transition: { duration: 0.12 } }}>
-                  <Link href={l.href} className="persona-link lift" style={{ height: '100%' }}>
+                  <Link href={l.href} className="persona-link lift" style={{ height: '100%' }} {...(l.href.startsWith('http') ? { target: '_blank', rel: 'noopener noreferrer' } : {})}>
                     <b style={{ fontSize: 17 }}>{l.title}</b>
                     <span style={{ fontSize: 14, color: 'var(--slate)', display: 'flex', justifyContent: 'space-between' }}>{l.note}<span aria-hidden="true" style={{ color: 'var(--saffron)' }}>→</span></span>
                   </Link>

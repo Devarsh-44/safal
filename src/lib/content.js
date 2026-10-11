@@ -77,7 +77,8 @@ export const personas = [
   { label: 'New parent', gu: 'નવા વાલી', hi: 'नए अभिभावक', links: [
     { title: 'Programs offered', note: 'Std 1–12, both mediums', href: '/academics' },
     { title: 'Online admission form', note: 'About 5 minutes', href: '/admissions' },
-    { title: 'Download brochure', note: 'PDF', href: '/brochure.pdf' },
+    // Switch back to '/brochure.pdf' once the school supplies the PDF.
+    { title: 'Get the brochure', note: 'Sent on WhatsApp', href: 'https://wa.me/919316393763?text=' + encodeURIComponent('Hello, please send me the Safal Vidyalaya admission brochure.') },
     { title: 'Book a campus visit', note: 'We call you back', href: '/#visit' } ] },
   { label: 'Current parent', gu: 'હાલના વાલી', hi: 'वर्तमान अभिभावक', links: [
     { title: 'Academic planner', note: 'Term calendar', href: '/academics#planner' },
