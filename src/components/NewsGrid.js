@@ -49,11 +49,11 @@ export default function NewsGrid({ limit, heading }) {
                 onClick={() => setOpen(n)}
               >
                 <div className="news-thumb" style={{ background: tints[k % 4] }}>
-                  {n.image_url ? <img src={n.image_url} alt="" /> : <span>[{n.tag} photo]</span>}
+                  {n.image_url ? <img src={n.image_url} alt="" /> : <span className="news-oval" aria-hidden="true">{n.tag}</span>}
                   {n.type === 'video' && <span className="play"><Icon name="play" size={20} style={{ color: 'var(--saffron)' }} /></span>}
                 </div>
                 <div style={{ padding: '18px 20px 22px' }}>
-                  <span style={{ fontSize: 13, fontWeight: 700, letterSpacing: '.08em', textTransform: 'uppercase', color: 'var(--saffron)' }}>{n.tag} · {fmt(n.date)}</span>
+                  <span className="news-meta">{n.tag} · {fmt(n.date)}</span>
                   <b style={{ display: 'block', fontSize: 19, lineHeight: 1.3, marginTop: 6 }}>{n.title}</b>
                 </div>
               </motion.button>
@@ -75,11 +75,11 @@ export default function NewsGrid({ limit, heading }) {
               initial={{ y: 40, scale: 0.96 }} animate={{ y: 0, scale: 1 }} exit={{ y: 40, scale: 0.96 }} transition={{ type: 'spring', stiffness: 320, damping: 30 }}
             >
               <div className="news-thumb" style={{ background: 'var(--mist)', aspectRatio: '16/9' }}>
-                {open.image_url ? <img src={open.image_url} alt="" /> : <span>[{open.tag} photo]</span>}
+                {open.image_url ? <img src={open.image_url} alt="" /> : <span className="news-oval" aria-hidden="true">{open.tag}</span>}
               </div>
               <div style={{ padding: 28 }}>
-                <span className="eyebrow">{open.tag} · {fmt(open.date)}</span>
                 <h3 className="display h3" style={{ margin: '4px 0 12px' }}>{open.title}</h3>
+                <p className="news-meta" style={{ margin: '0 0 12px' }}>{open.tag} · {fmt(open.date)}</p>
                 <p className="muted" style={{ margin: 0, whiteSpace: 'pre-line' }}>{open.body}</p>
                 {open.video_url && <a className="btn btn-primary" style={{ marginTop: 20 }} href={open.video_url} target="_blank" rel="noopener noreferrer">{t.news.watch}</a>}
                 <div><button className="btn btn-ghost" style={{ marginTop: 20 }} onClick={() => setOpen(null)}>{t.news.close}</button></div>

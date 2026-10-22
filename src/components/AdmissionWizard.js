@@ -28,6 +28,9 @@ export default function AdmissionWizard() {
   // Restore / auto-save the draft so parents never lose progress.
   useEffect(() => {
     try { const d = JSON.parse(localStorage.getItem(DRAFT_KEY) || 'null'); if (d) { setF({ ...empty, ...d.f }); setStep(Math.min(d.step ?? 0, 3)); } else setF((x) => ({ ...x, campus: school.campuses[branch].name })); } catch {}
+    // The home page's date-of-birth finder links here as /admissions?std=N.
+    const std = Number(new URLSearchParams(window.location.search).get('std'));
+    if (std >= 1 && std <= 12) { setF((x) => ({ ...x, standard: std, stream: std >= 11 ? x.stream : null })); setStep(0); }
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
   useEffect(() => {
     if (ref) return;
@@ -89,22 +92,22 @@ export default function AdmissionWizard() {
           {w.steps.map((label, i) => {
             const done = ref || i < step, cur = !ref && i === step;
             return (
-              <li key={i} className={done ? 'done' : cur ? 'cur' : ''}>
+              <li key={i} className={done ? 'done' : cur ? 'cur' : ''} data-reveal style={{ '--d': i }}>
                 <span className="dot">{done ? <Icon name="check" size={18} strokeWidth={2.6} /> : i + 1}</span>
                 {done && !ref ? <button onClick={() => go(i)} style={{ background: 'none', border: 0, padding: 0, cursor: 'pointer', fontWeight: 500, textDecoration: 'underline' }}>{label}</button> : label}
               </li>
             );
           })}
         </ol>
-        <div className="card" style={{ marginTop: 28, padding: 18, borderRadius: 16, fontSize: 15 }}>
+        <div className="card" data-reveal style={{ '--d': 4, marginTop: 28, padding: 20 }}>
           <b style={{ display: 'block', marginBottom: 4 }}>{w.saved}</b>
           <span className="muted">{w.savedBody} <a href={`tel:${school.phone}`}>{school.phoneDisplay}</a></span>
         </div>
       </aside>
 
       <main>
-        <div className="progress" aria-hidden="true"><div style={{ width: progress + '%' }} /></div>
-        <div className="card" style={{ padding: 'clamp(20px, 4vw, 36px)', boxShadow: 'var(--shadow)', overflow: 'hidden' }}>
+        <div className="progress" aria-hidden="true" data-reveal><div style={{ width: progress + '%' }} /></div>
+        <div className="card" data-reveal style={{ '--d': 1, padding: 'clamp(20px, 4vw, 36px)', overflow: 'hidden' }}>
           <AnimatePresence mode="wait" custom={dir}>
             {ref ? (
               <motion.div key="done" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} style={{ textAlign: 'center', padding: '24px 0' }}>
@@ -226,7 +229,7 @@ export default function AdmissionWizard() {
           </AnimatePresence>
 
           {!ref && (
-            <div style={{ display: 'flex', justifyContent: 'space-between', gap: 12, marginTop: 32, paddingTop: 24, borderTop: '1px solid var(--line)' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', gap: 12, marginTop: 40 }}>
               <button type="button" className="btn btn-ghost" onClick={() => go(step - 1)} style={{ visibility: step === 0 ? 'hidden' : 'visible' }}>{w.back}</button>
               {step < 3 ? (
                 <button type="button" className="btn btn-primary btn-lg" onClick={next}>{w.next} <Icon name="arrow" size={20} /></button>
