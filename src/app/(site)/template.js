@@ -1,12 +1,21 @@
 'use client';
-import { motion, useReducedMotion } from 'framer-motion';
+import { useLayoutEffect, useState } from 'react';
 
-/** Page transition: every route change fades the new page in. Opacity only — a transform here would break GSAP pinning. */
+/**
+ * Page change: a black curtain carrying the school's name lifts away with a curved edge.
+ * Client-side navigations only (the first load has the preloader); pure CSS, so nothing stays hidden
+ * if script stops.
+ */
 export default function Template({ children }) {
-  const reduce = useReducedMotion();
+  const [curtain, setCurtain] = useState(false);
+  useLayoutEffect(() => {
+    if (window.__svNavigated) setCurtain(true);
+    window.__svNavigated = true;
+  }, []);
   return (
-    <motion.div initial={reduce ? false : { opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.45, ease: [0.2, 0.7, 0.2, 1] }}>
+    <>
+      {curtain && <div className="curtain2" aria-hidden="true" onAnimationEnd={(e) => e.target === e.currentTarget && setCurtain(false)}><b>Safal</b></div>}
       {children}
-    </motion.div>
+    </>
   );
 }
