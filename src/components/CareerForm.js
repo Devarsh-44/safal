@@ -40,7 +40,7 @@ export default function CareerForm() {
   );
 
   return (
-    <div className="card" data-reveal style={{ '--d': 1, padding: 'clamp(20px, 4vw, 36px)' }}>
+    <div className="card" style={{ padding: 'clamp(20px, 4vw, 36px)', boxShadow: 'var(--shadow)' }}>
       <AnimatePresence mode="wait">
         {status === 'done' ? (
           <motion.div key="ok" initial={{ opacity: 0, scale: 0.96 }} animate={{ opacity: 1, scale: 1 }} style={{ textAlign: 'center', padding: '32px 0' }}>
@@ -50,6 +50,7 @@ export default function CareerForm() {
           </motion.div>
         ) : (
           <motion.form key="form" onSubmit={submit} noValidate style={{ display: 'grid', gap: 16 }}>
+            <p className="eyebrow" style={{ margin: 0 }}>{c.eyebrow}</p>
             <h2 className="display h3" style={{ margin: 0 }}>{c.title}</h2>
             <div className="grid-2">
               {F({ k: 'name', label: c.name, children: <input value={f.name} onChange={set('name')} autoComplete="name" /> })}

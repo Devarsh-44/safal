@@ -7,14 +7,27 @@ import Icon from './Icons';
 import { useLang, languages, pick } from '@/lib/i18n';
 import { school } from '@/lib/content';
 
-const links = [['/academics', 'academics'], ['/admissions', 'admissions'], ['/facilities', 'facilities'], ['/news', 'news'], ['/contact', 'contact']];
+const links = [
+  ['/', 'about'], ['/academics', 'academics'], ['/admissions', 'admissions'], ['/facilities', 'facilities'],
+  ['/news', 'news'], ['/careers', 'careers'], ['/contact', 'contact'],
+];
 
-/** Plain navy bar: wordmark, five links, campus and language switches, one action. */
+/**
+ * Fixed header: transparent with white text over the page's dark/photo hero, turning into a
+ * frosted white bar once the visitor scrolls. Holds the language switch (EN / ગુ / हि) and campus switch.
+ */
 export default function Header() {
   const { t, lang, setLang, branch, setBranch } = useLang();
   const path = usePathname();
+  const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
 
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 60);
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
   useEffect(() => { setOpen(false); }, [path]);
   useEffect(() => {
     if (!open) return;
@@ -24,49 +37,62 @@ export default function Header() {
     return () => { window.removeEventListener('keydown', onKey); window.__lenis?.start(); };
   }, [open]);
 
-  const Campus = () => (
-    <div className="bar-switch bar-campus" role="group" aria-label={t.campusPick}>
-      {school.campuses.map((c, i) => <button key={c.id} aria-pressed={branch === i} onClick={() => setBranch(i)}>{pick(lang, c)}</button>)}
-    </div>
-  );
-  const Lang = ({ full }) => (
-    <div className="bar-switch" role="group" aria-label="Language">
-      {languages.map((l) => <button key={l.id} aria-pressed={lang === l.id} onClick={() => setLang(l.id)} title={l.name} lang={l.id}>{full ? l.name : l.label}</button>)}
-    </div>
-  );
+  const c = school.campuses[branch];
 
   return (
     <>
-      <header className="bar">
-        <div className="bar-row">
-          <Link href="/" className="bar-mark" aria-label="Safal Vidyalaya home"><i aria-hidden="true" />Safal Vidyalaya</Link>
-          <nav className="bar-nav" aria-label="Main">
-            {links.map(([href, key]) => <Link key={key} href={href} className={'bar-link' + (path === href ? ' active' : '')}>{t.home.nav[key]}</Link>)}
+      <header className={'hdr' + (scrolled ? ' solid' : '')}>
+        <div className="hdr-row">
+          <Link href="/" className="hdr-logo" aria-label="Safal Vidyalaya home">
+            <img src="/images/logo.png" alt="Safal Vidyalaya — Creation of Life Through Education" />
+          </Link>
+          <nav className="hdr-nav" aria-label="Main">
+            {links.map(([href, key]) => (
+              <Link key={key} href={href} className={path === href && href !== '/' ? 'active' : ''}>{t.nav[key]}</Link>
+            ))}
           </nav>
-          <div className="bar-opts"><Campus /><Lang /></div>
-          <Link href="/admissions" className="btn-oval">{t.applyShort}</Link>
-          <button className="bar-burger" aria-label="Open menu" aria-expanded={open} onClick={() => setOpen(true)}><Icon name="menu" size={20} /></button>
+          <div className="hdr-actions">
+            <div className="hdr-lang" role="group" aria-label="Language">
+              {languages.map((l) => (
+                <button key={l.id} aria-pressed={lang === l.id} onClick={() => setLang(l.id)} title={l.name}>{l.label}</button>
+              ))}
+            </div>
+            <a href={`tel:${c.phone.startsWith('[') ? school.phone : c.phone.replace(/\s/g, '')}`} className="hdr-call" aria-label={`${t.call} ${pick(lang, c)}`}><Icon name="phone" size={18} /></a>
+            <Link href="/admissions" className="btn btn-pill btn-primary hdr-apply">{t.apply}</Link>
+            <button className="hdr-burger" aria-label="Open menu" aria-expanded={open} onClick={() => setOpen(true)}><Icon name="menu" size={20} /></button>
+          </div>
         </div>
       </header>
 
       <AnimatePresence>
         {open && (
-          <motion.div className="menu" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.25 }}>
+          <motion.div
+            className="menu" initial={{ clipPath: 'circle(0% at 100% 0%)' }} animate={{ clipPath: 'circle(150% at 100% 0%)' }}
+            exit={{ clipPath: 'circle(0% at 100% 0%)' }} transition={{ duration: 0.6, ease: [0.7, 0, 0.2, 1] }}
+          >
             <div className="menu-top">
-              <Link href="/" className="bar-mark"><i aria-hidden="true" />Safal Vidyalaya</Link>
-              <button className="bar-burger" style={{ display: 'inline-flex' }} aria-label="Close menu" onClick={() => setOpen(false)}><Icon name="close" size={20} /></button>
+              <img src="/images/logo.png" alt="" style={{ height: 40, borderRadius: 8 }} />
+              <button className="hdr-burger" style={{ display: 'inline-flex' }} aria-label="Close menu" onClick={() => setOpen(false)}><Icon name="close" size={20} /></button>
             </div>
             <nav aria-label="Mobile" className="menu-links">
-              {[['/', null], ...links].map(([href, key], i) => (
-                <motion.div key={href} initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.06 + i * 0.05, duration: 0.45, ease: [0.2, 0.7, 0.2, 1] }}>
-                  <Link href={href}>{key ? t.home.nav[key] : t.common.home}</Link>
+              {links.map(([href, key], i) => (
+                <motion.div key={key} initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 + i * 0.05, duration: 0.5 }}>
+                  <Link href={href} className="display">{t.nav[key]}</Link>
                 </motion.div>
               ))}
             </nav>
             <div className="menu-foot">
-              <Campus />
-              <Lang full />
-              <Link href="/admissions" className="btn-oval" style={{ justifyContent: 'center' }}>{t.apply}</Link>
+              <div className="hx-seg" role="group" aria-label={t.campusPick}>
+                {school.campuses.map((cp, i) => (
+                  <button key={cp.id} aria-pressed={branch === i} onClick={() => setBranch(i)}>{pick(lang, cp)}</button>
+                ))}
+              </div>
+              <div className="hdr-lang" role="group" aria-label="Language">
+                {languages.map((l) => (
+                  <button key={l.id} aria-pressed={lang === l.id} onClick={() => setLang(l.id)}>{l.name}</button>
+                ))}
+              </div>
+              <Link href="/admissions" className="btn btn-pill btn-primary btn-lg btn-block">{t.apply}</Link>
             </div>
           </motion.div>
         )}

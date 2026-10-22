@@ -1,10 +1,11 @@
 'use client';
 import { useState } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
+import Icon from './Icons';
 import { createMessage } from '@/lib/store';
 import { validPhone } from './CallbackForm';
 import { useLang } from '@/lib/i18n';
 
-/** "Drop us a line", set as the page's clip-out coupon: heading on the stub, fields on the ticket. */
 export default function ContactForm() {
   const { t } = useLang();
   const c = t.contactForm;
@@ -26,35 +27,29 @@ export default function ContactForm() {
     try { await createMessage({ ...f, email: f.email || null }); setStatus('done'); } catch { setStatus('error'); }
   }
 
-  const Err = ({ k }) => (errors[k] ? <span className="ph-err">{c[errors[k]]}</span> : null);
-
   return (
-    <section className="ph-visit" id="write">
-      <div className="ph-coupon" data-reveal>
-        <div className="ph-coupon-left">
-          <h2 className="ph-h2">{c.title}</h2>
-          <span className="ph-stub-photo" aria-hidden="true"><img src="/images/live/safal-boy.webp" alt="" loading="lazy" style={{ objectPosition: '45% 40%' }} /></span>
-          <p>{c.doneBody}</p>
-        </div>
-        <div className="ph-coupon-right">
-          {status === 'done' ? (
-            <div className="ph-done" role="status"><b>{c.done}</b><p>{c.doneBody}</p></div>
-          ) : (
-            <form onSubmit={submit} noValidate>
-              <label><span className="sr-only">{c.name}</span><input value={f.name} onChange={set('name')} placeholder={c.name} autoComplete="name" aria-invalid={!!errors.name} /></label>
-              <Err k="name" />
-              <label><span className="sr-only">{c.phone}</span><input type="tel" inputMode="tel" value={f.phone} onChange={set('phone')} placeholder={c.phone} autoComplete="tel" aria-invalid={!!errors.phone} /></label>
-              <Err k="phone" />
-              <label><span className="sr-only">{c.email}</span><input type="email" value={f.email} onChange={set('email')} placeholder={c.email} autoComplete="email" aria-invalid={!!errors.email} /></label>
-              <Err k="email" />
-              <label><span className="sr-only">{c.message}</span><textarea value={f.message} onChange={set('message')} placeholder={c.message} rows={4} aria-invalid={!!errors.message} /></label>
-              <Err k="message" />
-              {status === 'error' && <span className="ph-err" role="alert">{c.error}</span>}
-              <button className="ph-submit" disabled={status === 'sending'}>{status === 'sending' ? t.common.sending : c.submit}</button>
-            </form>
-          )}
-        </div>
-      </div>
-    </section>
+    <div className="card" style={{ padding: 'clamp(20px, 4vw, 36px)', boxShadow: 'var(--shadow)' }}>
+      <AnimatePresence mode="wait">
+        {status === 'done' ? (
+          <motion.div key="ok" initial={{ opacity: 0, scale: 0.96 }} animate={{ opacity: 1, scale: 1 }} style={{ textAlign: 'center', padding: '40px 0' }}>
+            <span style={{ display: 'inline-flex', width: 72, height: 72, borderRadius: 999, background: '#E3F3EA', color: 'var(--green)', alignItems: 'center', justifyContent: 'center' }}><Icon name="check" size={36} strokeWidth={2.6} /></span>
+            <h3 className="display h3" style={{ margin: '16px 0 8px' }}>{c.done}</h3>
+            <p className="muted" style={{ margin: 0 }}>{c.doneBody}</p>
+          </motion.div>
+        ) : (
+          <motion.form key="f" onSubmit={submit} noValidate style={{ display: 'grid', gap: 16 }}>
+            <h2 className="display h3" style={{ margin: 0 }}>{c.title}</h2>
+            <div className="grid-2">
+              <label className={'field' + (errors.name ? ' invalid' : '')}>{c.name}<input value={f.name} onChange={set('name')} autoComplete="name" />{errors.name && <span className="err">{c[errors.name]}</span>}</label>
+              <label className={'field' + (errors.phone ? ' invalid' : '')}>{c.phone}<input type="tel" value={f.phone} onChange={set('phone')} autoComplete="tel" />{errors.phone && <span className="err">{c[errors.phone]}</span>}</label>
+            </div>
+            <label className={'field' + (errors.email ? ' invalid' : '')}>{c.email}<input type="email" value={f.email} onChange={set('email')} autoComplete="email" />{errors.email && <span className="err">{c[errors.email]}</span>}</label>
+            <label className={'field' + (errors.message ? ' invalid' : '')}>{c.message}<textarea value={f.message} onChange={set('message')} />{errors.message && <span className="err">{c[errors.message]}</span>}</label>
+            {status === 'error' && <p className="form-error" role="alert">{c.error}</p>}
+            <button className="btn btn-primary btn-lg" disabled={status === 'sending'}>{status === 'sending' ? t.common.sending : c.submit}</button>
+          </motion.form>
+        )}
+      </AnimatePresence>
+    </div>
   );
 }

@@ -1,9 +1,10 @@
 'use client';
 import { useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
+import Icon from './Icons';
+import { Reveal } from './Motion';
 import { useLang } from '@/lib/i18n';
 
-// [BRACKETED] text is what the school still has to supply; it is kept in the data and hidden on the page.
 const items = [
   { id: 'syllabus', title: 'Syllabus', body: 'Standard-wise syllabus for English and Gujarati medium. [UPLOAD SYLLABUS PDFs PER STANDARD]' },
   { id: 'assessment', title: 'Child Assessment', body: 'How we track each child’s progress through the year. [ADD DETAILS]' },
@@ -12,40 +13,40 @@ const items = [
   { id: 'evaluation', title: 'Evaluation System', body: 'How marks and grades are calculated. [ADD DETAILS]' },
   { id: 'planner', title: 'Academic Planner', body: 'Term calendar with holidays, events and parent–teacher meetings. [UPLOAD PLANNER]' },
 ];
-const clean = (s) => s.replace(/\s*\[[^\]]*\]/g, '');
 
-/** Academic resources: one column of filled rows that open in place, each marked with the page's oval. */
 export default function AcademicResources() {
   const { t } = useLang();
   const r = t.resources;
   const [open, setOpen] = useState('syllabus');
   return (
-    <section className="ph-res" id="syllabus">
-      <div className="ph-wrap ph-res-grid">
+    <section className="section">
+      <div className="container" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: 48, alignItems: 'start' }}>
         <div>
-          <h2 className="ph-h2" data-reveal>{r.title}</h2>
-          <p className="ph-res-body" data-reveal style={{ '--d': 1 }}>{r.body}</p>
+          <Reveal as="p" className="mono">{r.eyebrow}</Reveal>
+          <Reveal as="h2" className="display h2" delay={0.05}>{r.title}</Reveal>
+          <Reveal as="p" className="muted" delay={0.1} style={{ marginTop: 16 }}>{r.body}</Reveal>
         </div>
-        <ul className="ph-res-list">
-          {items.map((it, k) => {
+        <div style={{ display: 'grid', gap: 10 }}>
+          {items.map((it) => {
             const isOpen = open === it.id;
             const tr = r.items?.[it.id] ?? it;
             return (
-              <li key={it.id} id={it.id} className={isOpen ? 'open' : ''} data-reveal style={{ '--d': k % 3 }}>
-                <button onClick={() => setOpen(isOpen ? null : it.id)} aria-expanded={isOpen} aria-controls={`res-${it.id}`}>
-                  <i aria-hidden="true" />{tr.title}
+              <div key={it.id} id={it.id} className="card" style={{ borderRadius: 16, overflow: 'hidden', borderColor: isOpen ? 'var(--blue)' : undefined }}>
+                <button onClick={() => setOpen(isOpen ? null : it.id)} aria-expanded={isOpen} style={{ width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '18px 20px', background: 'none', border: 0, cursor: 'pointer', fontWeight: 700, fontSize: 18, textAlign: 'left' }}>
+                  {tr.title}
+                  <motion.span animate={{ rotate: isOpen ? 45 : 0 }} style={{ color: 'var(--saffron)', display: 'flex' }}><Icon name="plus" /></motion.span>
                 </button>
                 <AnimatePresence initial={false}>
                   {isOpen && (
-                    <motion.div id={`res-${it.id}`} initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.3, ease: [0.2, 0.7, 0.2, 1] }}>
-                      <p>{clean(tr.body)}</p>
+                    <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.3 }}>
+                      <p className="muted" style={{ margin: 0, padding: '0 20px 20px' }}>{tr.body}</p>
                     </motion.div>
                   )}
                 </AnimatePresence>
-              </li>
+              </div>
             );
           })}
-        </ul>
+        </div>
       </div>
     </section>
   );

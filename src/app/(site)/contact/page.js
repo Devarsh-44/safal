@@ -1,18 +1,19 @@
 import PageHero from '@/components/PageHero';
 import ContactForm from '@/components/ContactForm';
-import { Scope, Where } from '@/components/home/Porthole';
+import ContactInfo from '@/components/ContactInfo';
 
-export const metadata = { title: 'Contact', description: 'Call, WhatsApp or visit Safal Vidyalaya in Sector 22, Gandhinagar and in Ahmedabad.' };
+export const metadata = { title: 'Contact', description: 'Call, WhatsApp or visit Safal Vidyalaya — Sector 22, Gandhinagar and Ahmedabad.' };
 
 export default function ContactPage() {
   return (
     <>
       <PageHero page="contact" />
-      <Scope>
-        <div className="ph-spacer" />
-        <Where />
-        <ContactForm />
-      </Scope>
+      <section className="section">
+        <div className="container" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: 40, alignItems: 'start' }}>
+          <ContactInfo />
+          <ContactForm />
+        </div>
+      </section>
     </>
   );
 }
