@@ -1,6 +1,7 @@
 'use client';
 import { createContext, useContext, useEffect, useMemo, useState } from 'react';
 import { pageStrings } from './strings';
+import { homeStrings } from './homeStrings';
 
 // Gujarati and Hindi strings should be proof-read by the school before launch.
 const dict = {
@@ -78,7 +79,7 @@ export const languages = [
   { id: 'hi', label: 'हि', name: 'हिन्दी' },
 ];
 
-const build = (l) => ({ ...dict[l], ...pageStrings[l], content: pageStrings[l].content ?? {} });
+const build = (l) => ({ ...dict[l], ...pageStrings[l], content: pageStrings[l].content ?? {}, home: homeStrings[l] });
 const LangContext = createContext({ lang: 'en', t: build('en'), setLang: () => {}, branch: 0, setBranch: () => {} });
 
 /** Holds the chosen language and campus (branch); both are remembered in localStorage. */
