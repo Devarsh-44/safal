@@ -1,0 +1,50 @@
+[
+  {
+    "file": "public/images/world/gandhinagar-sector-28-garden-trees-01.jpg",
+    "media": "image",
+    "ref": "openverse:f34fc419-ecf0-4818-b759-f376816e3d1b",
+    "title": "Gandhinagar Sector 28 Garden Trees 01",
+    "creator": "Beypeople",
+    "creatorUrl": "https://commons.wikimedia.org/wiki/User:Beypeople",
+    "date": null,
+    "license": "CC BY-SA 4.0",
+    "licenseCode": "by-sa",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "creditRequired": true,
+    "page": "https://commons.wikimedia.org/w/index.php?curid=47518643",
+    "via": "Wikimedia Commons",
+    "image": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/96/Gandhinagar_Sector_28_Garden_Trees_01.jpg/1920px-Gandhinagar_Sector_28_Garden_Trees_01.jpg",
+    "width": 1920,
+    "height": 1080,
+    "bytes": 810590,
+    "credit": "\"Gandhinagar Sector 28 Garden Trees 01\" by Beypeople, CC BY-SA 4.0, via Wikimedia Commons",
+    "notes": [
+      "Share-alike: an altered version (recoloured, combined with other pictures) must be shared under the same licence."
+    ],
+    "saved": "2026-10-22T08:17:35.703Z"
+  },
+  {
+    "file": "public/images/world/cityplan.jpg",
+    "media": "image",
+    "ref": "commons:15670001",
+    "title": "Cityplan",
+    "creator": "Pmapte",
+    "creatorUrl": null,
+    "date": null,
+    "license": "CC BY-SA 3.0",
+    "licenseCode": "by-sa",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+    "creditRequired": true,
+    "page": "https://commons.wikimedia.org/wiki/File:Cityplan.JPG",
+    "via": "Wikimedia Commons",
+    "image": "https://upload.wikimedia.org/wikipedia/commons/2/21/Cityplan.JPG",
+    "width": 1700,
+    "height": 2200,
+    "bytes": 970621,
+    "credit": "\"Cityplan\" by Pmapte, CC BY-SA 3.0, via Wikimedia Commons",
+    "notes": [
+      "Share-alike: an altered version (recoloured, combined with other pictures) must be shared under the same licence."
+    ],
+    "saved": "2026-10-22T08:17:53.697Z"
+  }
+]
