@@ -1,12 +1,21 @@
 'use client';
-import { motion, useReducedMotion } from 'framer-motion';
+import { useLayoutEffect, useState } from 'react';
 
-/** Page transition: every route change fades the new page in. Opacity only — a transform here would break GSAP pinning. */
+/**
+ * Page transition, after the Bloom reference: on a client-side page change a navy curtain with the
+ * page's saffron oval covers the screen and lifts away (CSS animation in porthole.css). The very first
+ * page load shows no curtain, and nothing is hidden if script never runs.
+ */
 export default function Template({ children }) {
-  const reduce = useReducedMotion();
+  const [curtain, setCurtain] = useState(false);
+  useLayoutEffect(() => {
+    if (window.__svNavigated) setCurtain(true);
+    window.__svNavigated = true;
+  }, []);
   return (
-    <motion.div initial={reduce ? false : { opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.45, ease: [0.2, 0.7, 0.2, 1] }}>
+    <>
+      {curtain && <div className="curtain" aria-hidden="true" onAnimationEnd={(e) => e.target === e.currentTarget && setCurtain(false)}><i /></div>}
       {children}
-    </motion.div>
+    </>
   );
 }
