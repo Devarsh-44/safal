@@ -1,17 +1,17 @@
-import PageHero from '@/components/PageHero';
-import { BloomSection, StagesSection, ProgramsSection } from '@/components/home/Sections';
-import AcademicResources from '@/components/AcademicResources';
+import { PageHero2, Resources, Programs } from '@/components/v2/Inner';
+import { Statement, Stages, Steps } from '@/components/v2/Home';
 
-export const metadata = { title: 'Academics', description: 'Primary to Higher Secondary at Safal Vidyalaya — English & Gujarati medium, Arts, Commerce and Science streams.' };
+export const metadata = { title: 'Academics', description: 'Primary to Higher Secondary at Safal Vidyalaya: English and Gujarati medium, Arts, Commerce and Science streams.' };
 
 export default function AcademicsPage() {
   return (
     <>
-      <PageHero page="academics" />
-      <StagesSection showLink={false} />
-      <AcademicResources />
-      <BloomSection />
-      <ProgramsSection />
+      <PageHero2 page="academics" />
+      <Statement />
+      <Stages />
+      <Resources />
+      <Steps />
+      <Programs />
     </>
   );
 }

@@ -28,6 +28,9 @@ export default function AdmissionWizard() {
   // Restore / auto-save the draft so parents never lose progress.
   useEffect(() => {
     try { const d = JSON.parse(localStorage.getItem(DRAFT_KEY) || 'null'); if (d) { setF({ ...empty, ...d.f }); setStep(Math.min(d.step ?? 0, 3)); } else setF((x) => ({ ...x, campus: school.campuses[branch].name })); } catch {}
+    // The date-of-birth finder links here as /admissions?std=N.
+    const std = Number(new URLSearchParams(window.location.search).get('std'));
+    if (std >= 1 && std <= 12) { setF((x) => ({ ...x, standard: std, stream: std >= 11 ? x.stream : null })); setStep(0); }
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
   useEffect(() => {
     if (ref) return;
