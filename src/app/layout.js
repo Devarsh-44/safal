@@ -1,5 +1,4 @@
 import './globals.css';
-import './v2.css';
 import { LanguageProvider } from '@/lib/i18n';
 
 export const metadata = {
@@ -10,7 +9,7 @@ export const metadata = {
   icons: { icon: '/images/logo.png' },
 };
 
-export const viewport = { themeColor: '#f4f0e8' };
+export const viewport = { themeColor: '#FBFBFE', viewportFit: 'cover' };
 
 export default function RootLayout({ children }) {
   return (
@@ -22,7 +21,7 @@ export default function RootLayout({ children }) {
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
         <link
           rel="stylesheet"
-          href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800&family=Hind+Vadodara:wght@400;500;600;700&family=Mukta:wght@400;500;600;700&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Young+Serif&family=Figtree:wght@400;500;600;700&family=Caveat:wght@600;700&family=Baloo+Bhai+2:wght@500;600;700&family=Baloo+2:wght@500;600;700&family=Inter+Tight:wght@400;500;600;700;800&family=Hind+Vadodara:wght@400;500;600;700&family=Mukta:wght@400;500;600;700&display=swap"
         />
       </head>
       <body suppressHydrationWarning>

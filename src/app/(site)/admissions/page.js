@@ -1,13 +1,10 @@
-import AdmissionWizard from '@/components/AdmissionWizard';
-import { PageHero2 } from '@/components/v2/Inner';
+import AdmissionsPage from '@/components/v3/AdmissionsPage';
 
-export const metadata = { title: 'Admissions 2026–27', description: 'Apply online to Safal Vidyalaya: English and Gujarati medium, Std 1 to 12. Takes about five minutes.' };
+export const metadata = {
+  title: 'Admissions 2026–27',
+  description: 'Admissions are open at Safal Vidyalaya, Gandhinagar: English and Gujarati medium, Std 1 to 12. Check the age rule, the documents to bring, and apply online in about five minutes.',
+};
 
-export default function AdmissionsPage() {
-  return (
-    <>
-      <PageHero2 page="admissions" />
-      <section className="sec" style={{ paddingTop: 0 }}><div className="wrap" data-reveal><AdmissionWizard /></div></section>
-    </>
-  );
+export default function Page() {
+  return <AdmissionsPage />;
 }

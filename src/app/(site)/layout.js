@@ -1,19 +1,16 @@
-import Header from '@/components/v2/Header';
-import Footer from '@/components/v2/Footer';
-import MotionSystem from '@/components/v2/MotionSystem';
-import Preloader from '@/components/v2/Preloader';
-import Cursor from '@/components/v2/Cursor';
+import '../v3.css';
+import Header from '@/components/v3/Header';
+import Footer from '@/components/v3/Footer';
+import PageTransition from '@/components/v3/PageTransition';
 
 export default function SiteLayout({ children }) {
   return (
-    <>
+    <div className="v3">
       <a href="#main" className="sr-only">Skip to content</a>
-      <Preloader />
       <Header />
       <main id="main">{children}</main>
       <Footer />
-      <MotionSystem />
-      <Cursor />
-    </>
+      <PageTransition />
+    </div>
   );
 }
