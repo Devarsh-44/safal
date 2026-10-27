@@ -15,16 +15,27 @@ import { Ink } from './Marks';
 // Notebook order decides the direction. Unknown pages count as "after" everything listed.
 const ORDER = ['/', '/admissions', '/academics', '/campus', '/life', '/about', '/contact', '/careers'];
 // Each page's colour field, and the ink that reads on it.
-const COLORS = { '/': ['#F7B928', '#241D5C'], '/admissions': ['#4AB3EC', '#241D5C'] };
+const COLORS = { '/': ['#F7B928', '#241D5C'], '/admissions': ['#4AB3EC', '#241D5C'], '/academics': ['#34B470', '#241D5C'], '/campus': ['#EE7A43', '#241D5C'], '/life': ['#E0453F', '#FFFFFF'], '/about': ['#8B6CF0', '#FFFFFF'], '/contact': ['#14B8A6', '#241D5C'], '/careers': ['#EC5F9A', '#FFFFFF'] };
 const FALLBACK = ['#241D5C', '#FFFFFF'];
+
+// Where each page's name lives in t.v3, for the label written on the coloured screen.
+const CRUMB = { '/admissions': 'adm', '/academics': 'acad', '/campus': 'camp', '/life': 'lp', '/about': 'ab', '/contact': 'ct', '/careers': 'cr' };
 
 const SWEEP = 300; // ms for the sweep to cross the screen
 const SCATTER = 110; // ms of randomness so it feels hand-made, not mechanical
 const CELL = 300; // ms each square takes to fill or clear
 const HOLD = 200; // ms the page name stays on a fully covered screen
+const PATIENCE = 12000; // ms to stay covered waiting for a slow page (the dev server builds pages on first visit)
 
 const rank = (p) => { const i = ORDER.indexOf(p); return i < 0 ? ORDER.length : i; };
 const wait = (ms) => new Promise((r) => setTimeout(r, ms));
+// Bigger squares mean fewer of them to animate: about 130 on a laptop, 80 on a phone.
+const gridFor = () => {
+  const w = window.innerWidth || document.documentElement.clientWidth;
+  const h = window.innerHeight || document.documentElement.clientHeight;
+  const cell = w < 700 ? 64 : 104;
+  return { cols: Math.ceil(w / cell), rows: Math.ceil(h / cell) };
+};
 
 export default function PageTransition() {
   const router = useRouter();
@@ -33,29 +44,41 @@ export default function PageTransition() {
   const grid = useRef(null);
   const s = useRef({ busy: false, pending: null, from: path });
   const [size, setSize] = useState({ cols: 0, rows: 0 });
-  const [view, setView] = useState({ on: false, covered: false, bg: FALLBACK[0], fg: FALLBACK[1], label: '' });
+  const [view, setView] = useState({ on: false, covered: false, waiting: false, bg: FALLBACK[0], fg: FALLBACK[1], label: '' });
 
   const labelFor = useCallback((p) => {
     if (p === '/') return t.v3.home;
-    if (p === '/admissions') return t.v3.adm.crumb;
+    if (CRUMB[p]) return t.v3[CRUMB[p]].crumb;
     return t.v3.nav.find(([href]) => href.split('#')[0] === p)?.[1] ?? '';
   }, [t]);
 
   useEffect(() => {
-    const fit = () => {
-      // Bigger squares mean fewer of them to animate: about 130 on a laptop, 80 on a phone.
-      const cell = window.innerWidth < 700 ? 64 : 104;
-      setSize({ cols: Math.ceil(window.innerWidth / cell), rows: Math.ceil(window.innerHeight / cell) });
-    };
+    const fit = () => setSize(gridFor());
     fit();
     window.addEventListener('resize', fit);
     return () => window.removeEventListener('resize', fit);
   }, []);
 
+  // Start loading a page as soon as a link to it is hovered or touched, so it's ready when the screen is covered.
+  useEffect(() => {
+    const seen = new Set();
+    const warm = (e) => {
+      const a = e.target.closest?.('a[href]');
+      if (!a) return;
+      const url = new URL(a.href, window.location.href);
+      if (url.origin !== window.location.origin || url.pathname.startsWith('/admin') || seen.has(url.pathname)) return;
+      seen.add(url.pathname);
+      router.prefetch(url.pathname);
+    };
+    document.addEventListener('pointerover', warm, { passive: true });
+    document.addEventListener('touchstart', warm, { passive: true });
+    return () => { document.removeEventListener('pointerover', warm); document.removeEventListener('touchstart', warm); };
+  }, [router]);
+
   /** Fills (`cover`) or clears the squares, sweeping in `dir` (1 = left to right). `instant` skips the animation. */
   const run = useCallback((kind, dir, instant = false) => {
     const cells = grid.current ? [...grid.current.children] : [];
-    const { cols, rows } = size;
+    const { cols, rows } = size.cols ? size : gridFor();
     // Transform only, so the animation runs on the compositor and stays smooth while the next page loads.
     const frames = [{ transform: 'scale(0) rotate(-18deg)' }, { transform: 'scale(1.04) rotate(0deg)' }];
     const anims = cells.map((el, i) => {
@@ -81,8 +104,10 @@ export default function PageTransition() {
   }, [size]);
 
   const reveal = useCallback(async (dir, hold) => {
+    // The page has arrived: stop the "still loading" timers from touching this transition.
+    s.current.pending = null;
     if (hold) await wait(hold);
-    setView((v) => ({ ...v, covered: false }));
+    setView((v) => ({ ...v, covered: false, waiting: false }));
     await run('reveal', dir);
     (grid.current ? [...grid.current.children] : []).forEach((el) => el.getAnimations().forEach((a) => a.cancel()));
     setView((v) => ({ ...v, on: false }));
@@ -107,17 +132,23 @@ export default function PageTransition() {
       const [bg, fg] = COLORS[url.pathname] ?? FALLBACK;
       // Start fetching the next page now, so it is ready by the time the screen is covered.
       router.prefetch(url.pathname);
-      flushSync(() => setView({ on: true, covered: false, bg, fg, label: labelFor(url.pathname) }));
+      // Measure the squares now, in case the window had no size when the page first loaded.
+      flushSync(() => {
+        if (!size.cols || !size.rows) setSize(gridFor());
+        setView({ on: true, covered: false, waiting: false, bg, fg, label: labelFor(url.pathname) });
+      });
       await run('cover', dir);
       setView((v) => ({ ...v, covered: true }));
       st.pending = { target: url.pathname, dir };
       router.push(url.pathname + url.search + url.hash);
-      // Never leave the screen covered if the page is slow or the navigation fails.
-      setTimeout(() => { if (s.current.pending?.target === url.pathname) reveal(dir, 0); }, 5000);
+      // If the page takes a moment (first visit on the dev server, a slow phone), show that it's on its way.
+      setTimeout(() => { if (s.current.pending?.target === url.pathname) setView((v) => ({ ...v, waiting: true })); }, 700);
+      // Never leave the screen covered for good if the navigation fails.
+      setTimeout(() => { if (s.current.pending?.target === url.pathname) reveal(dir, 0); }, PATIENCE);
     };
     document.addEventListener('click', onClick, true);
     return () => document.removeEventListener('click', onClick, true);
-  }, [labelFor, reveal, router, run]);
+  }, [labelFor, reveal, router, run, size]);
 
   // A new page has rendered. Runs before paint, so Back/Forward can cover the screen with no flash.
   useLayoutEffect(() => {
@@ -143,7 +174,7 @@ export default function PageTransition() {
   // The squares only change when the window is resized, never during a transition.
   const cells = useMemo(() => Array.from({ length: size.cols * size.rows }, (_, i) => <span key={i} className="pt-cell" />), [size]);
   return (
-    <div className={'pt' + (view.on ? ' on' : '') + (view.covered ? ' covered' : '')} style={{ '--pt-bg': view.bg, '--pt-fg': view.fg, '--cols': size.cols, '--rows': size.rows }} aria-hidden="true">
+    <div className={'pt' + (view.on ? ' on' : '') + (view.covered ? ' covered' : '') + (view.waiting ? ' waiting' : '')} style={{ '--pt-bg': view.bg, '--pt-fg': view.fg, '--cols': size.cols, '--rows': size.rows }} aria-hidden="true">
       <div className="pt-grid" ref={grid}>{cells}</div>
       <div className="pt-paper" />
       <p className="pt-label">
