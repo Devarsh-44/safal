@@ -6,7 +6,7 @@ import { Ink } from './Marks';
 
 /**
  * Top of every inner page: a shorter framed photo with a glass title card. `color` is the page's own
- * colour field (Admissions sky, Academics marigold…), shown on the page tab and the underline.
+ * colour field (Admissions sky, Academics leaf…), shown on the page tab and the underline.
  */
 export default function PageHero({ photo, pos = '50% 50%', color = 'var(--sky)', note, crumb, eyebrow, a, mark, b, intro, children }) {
   const { t } = useLang();
