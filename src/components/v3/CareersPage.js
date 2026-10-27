@@ -4,6 +4,7 @@ import { useLang } from '@/lib/i18n';
 import { school } from '@/lib/content';
 import { media } from '@/lib/media';
 import { createApplication, uploadFile } from '@/lib/store';
+import { validPhone } from '@/lib/validate';
 import { v3Strings } from '@/lib/v3Strings';
 import PageHero from './PageHero';
 import Sheet from './Sheet';
@@ -21,7 +22,6 @@ const ROLES = [
 ];
 // The admin panel lists applications in English, so the role saved is always the English title.
 const ROLE_EN = v3Strings.en.cr.roles.items.map(([title]) => title);
-const PHONE_RE = /^(\+?91[\s-]?)?[6-9]\d{4}[\s-]?\d{5}$/;
 const CV_TYPES = /\.(pdf|docx?)$/i;
 const CV_MAX = 5 * 1024 * 1024;
 const WHY_TINTS = ['#FCE4EE', '#DDF2FC', '#DCF3E6', '#FFF1C9'];
@@ -145,7 +145,7 @@ function ApplyForm({ role, roleNonce }) {
     const er = {};
     if (s === 0) {
       if (f.name.trim().length < 2) er.name = v.errName;
-      if (!PHONE_RE.test(f.phone.trim())) er.phone = v.errPhone;
+      if (!validPhone(f.phone)) er.phone = v.errPhone;
       if (!/^\S+@\S+\.\S+$/.test(f.email.trim())) er.email = v.errEmail;
     }
     if (s === 1) {

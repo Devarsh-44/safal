@@ -2,7 +2,7 @@
 import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';
 import { createEnquiry, uploadFile } from '@/lib/store';
-import { validPhone } from '@/components/CallbackForm';
+import { validPhone } from '@/lib/validate';
 import { school } from '@/lib/content';
 import { useLang, pick } from '@/lib/i18n';
 import { Ink } from './Marks';

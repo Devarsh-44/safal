@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { useLang } from '@/lib/i18n';
 import { school } from '@/lib/content';
 import { createEnquiry } from '@/lib/store';
-import { validPhone } from '@/components/CallbackForm';
+import { validPhone } from '@/lib/validate';
 import Sheet from './Sheet';
 import { Ink, Mark } from './Marks';
 

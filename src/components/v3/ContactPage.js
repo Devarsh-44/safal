@@ -3,13 +3,13 @@ import { useState } from 'react';
 import { useLang } from '@/lib/i18n';
 import { school } from '@/lib/content';
 import { createMessage } from '@/lib/store';
+import { validPhone } from '@/lib/validate';
 import { media } from '@/lib/media';
 import PageHero from './PageHero';
 import Sheet from './Sheet';
 import { Ink } from './Marks';
 import { Head, useReveal } from './Reveal';
 
-const PHONE_RE = /^(\+?91[\s-]?)?[6-9]\d{4}[\s-]?\d{5}$/;
 // The admin panel reads messages in English, so the topic prefix stays English whatever the page language.
 const TOPICS_EN = ['Admissions', 'Fees', 'Transport', 'Campus visit', 'Other'];
 const MAP_QUERY = 'Safal Vidyalaya, Sector 22, Gandhinagar';
@@ -40,7 +40,7 @@ function NoteForm() {
     e.preventDefault();
     const er = {};
     if (f.name.trim().length < 2) er.name = v.errName;
-    if (!PHONE_RE.test(f.phone.trim())) er.phone = v.errPhone;
+    if (!validPhone(f.phone)) er.phone = v.errPhone;
     if (f.email && !/^\S+@\S+\.\S+$/.test(f.email.trim())) er.email = v.errEmail;
     if (f.message.trim().length < 5) er.message = v.errMsg;
     setErr(er);
