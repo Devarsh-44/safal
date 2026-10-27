@@ -273,6 +273,8 @@ html:lang(gu) .v3, html:lang(hi) .v3 { line-height: 1.7; }
 .v3 .ftr .cols a:hover { text-decoration: underline; text-underline-offset: 4px; }
 .v3 .ftr .cols p { opacity: .85; }
 .v3 .ftr .fine { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; font-size: 13px; opacity: .7; border-top: 1px solid rgba(255, 255, 255, .18); padding-top: 18px; }
+.v3 .ftr .fine .staff { text-decoration: underline; text-underline-offset: 3px; text-decoration-color: rgba(255, 255, 255, .35); }
+.v3 .ftr .fine .staff:hover { text-decoration-color: currentColor; }
 .v3 .ftr details summary { cursor: pointer; }
 .v3 .ftr details ul { margin: 8px 0 0; padding-left: 18px; }
 

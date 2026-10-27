@@ -198,7 +198,7 @@ export const v3Strings = {
         errQual: 'Please add your qualification.', errExp: 'Please choose your experience.', errCv: 'Please attach your CV.', errCvType: 'Please attach a PDF or Word file.', errCvSize: 'The file is larger than 5 MB.',
         error: 'Something went wrong. Please try again, or email us.', done: 'Application received!', doneBody: "Thank you. If you are shortlisted, we'll call you to fix a demo lesson.", another: 'Send another application' },
     },
-    footer: { tag: 'Creation of Life Through Education', campuses: 'Campuses', call: 'Call', whatsapp: 'WhatsApp', email: 'Email', top: 'Back to top', samples: 'Some photos are openly licensed samples from other schools and will be replaced with Safal’s own.', credits: 'Photo credits', rights: '© 2026 Safal Vidyalaya' },
+    footer: { tag: 'Creation of Life Through Education', staff: 'Staff login', campuses: 'Campuses', call: 'Call', whatsapp: 'WhatsApp', email: 'Email', top: 'Back to top', samples: 'Some photos are openly licensed samples from other schools and will be replaced with Safal’s own.', credits: 'Photo credits', rights: '© 2026 Safal Vidyalaya' },
     bar: { call: 'Call', whatsapp: 'WhatsApp', apply: 'Apply' },
   },
 
@@ -396,7 +396,7 @@ export const v3Strings = {
         errQual: 'કૃપા કરી લાયકાત લખો.', errExp: 'કૃપા કરી અનુભવ પસંદ કરો.', errCv: 'કૃપા કરી CV જોડો.', errCvType: 'કૃપા કરી PDF કે Word ફાઇલ જોડો.', errCvSize: 'ફાઇલ 5 MB થી મોટી છે.',
         error: 'કંઈક ખોટું થયું. ફરી પ્રયત્ન કરો અથવા ઇમેઇલ કરો.', done: 'અરજી મળી ગઈ!', doneBody: 'આભાર. તમે પસંદ થશો તો ડેમો લેસન માટે અમે ફોન કરીશું.', another: 'બીજી અરજી મોકલો' },
     },
-    footer: { tag: 'Creation of Life Through Education', campuses: 'કેમ્પસ', call: 'ફોન', whatsapp: 'વોટ્સએપ', email: 'ઈમેલ', top: 'ઉપર જાઓ', samples: 'કેટલાક ફોટા અન્ય શાળાઓના ખુલ્લા લાયસન્સવાળા નમૂના છે, જે સફળના પોતાના ફોટાથી બદલાશે.', credits: 'ફોટો શ્રેય', rights: '© 2026 સફળ વિદ્યાલય' },
+    footer: { tag: 'Creation of Life Through Education', staff: 'સ્ટાફ લોગિન', campuses: 'કેમ્પસ', call: 'ફોન', whatsapp: 'વોટ્સએપ', email: 'ઈમેલ', top: 'ઉપર જાઓ', samples: 'કેટલાક ફોટા અન્ય શાળાઓના ખુલ્લા લાયસન્સવાળા નમૂના છે, જે સફળના પોતાના ફોટાથી બદલાશે.', credits: 'ફોટો શ્રેય', rights: '© 2026 સફળ વિદ્યાલય' },
     bar: { call: 'ફોન', whatsapp: 'વોટ્સએપ', apply: 'પ્રવેશ' },
   },
 
@@ -594,7 +594,7 @@ export const v3Strings = {
         errQual: 'कृपया योग्यता लिखें।', errExp: 'कृपया अनुभव चुनें।', errCv: 'कृपया CV जोड़ें।', errCvType: 'कृपया PDF या Word फ़ाइल जोड़ें।', errCvSize: 'फ़ाइल 5 MB से बड़ी है।',
         error: 'कुछ गड़बड़ हो गई। फिर कोशिश करें या ईमेल करें।', done: 'आवेदन मिल गया!', doneBody: 'धन्यवाद। अगर आप चुने गए, तो डेमो पाठ के लिए हम कॉल करेंगे।', another: 'एक और आवेदन भेजें' },
     },
-    footer: { tag: 'Creation of Life Through Education', campuses: 'कैंपस', call: 'फ़ोन', whatsapp: 'व्हाट्सऐप', email: 'ईमेल', top: 'ऊपर जाएँ', samples: 'कुछ फ़ोटो दूसरे स्कूलों के खुले लाइसेंस वाले नमूने हैं, जिन्हें सफल की अपनी फ़ोटो से बदला जाएगा।', credits: 'फ़ोटो श्रेय', rights: '© 2026 सफल विद्यालय' },
+    footer: { tag: 'Creation of Life Through Education', staff: 'स्टाफ़ लॉगिन', campuses: 'कैंपस', call: 'फ़ोन', whatsapp: 'व्हाट्सऐप', email: 'ईमेल', top: 'ऊपर जाएँ', samples: 'कुछ फ़ोटो दूसरे स्कूलों के खुले लाइसेंस वाले नमूने हैं, जिन्हें सफल की अपनी फ़ोटो से बदला जाएगा।', credits: 'फ़ोटो श्रेय', rights: '© 2026 सफल विद्यालय' },
     bar: { call: 'फ़ोन', whatsapp: 'व्हाट्सऐप', apply: 'प्रवेश' },
   },
 };

@@ -36,7 +36,7 @@ export default function Footer() {
             </div>
           </div>
           <div className="fine">
-            <span>{v.rights} · {school.affiliation}</span>
+            <span>{v.rights} · {school.affiliation} · <a className="staff" href="/admin" rel="nofollow">{v.staff}</a></span>
             <details>
               <summary>{v.credits}</summary>
               <p style={{ marginTop: 8 }}>{v.samples}</p>
