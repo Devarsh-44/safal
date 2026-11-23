@@ -35,7 +35,16 @@ function toCSV(rows) {
 export default function AdminApp() {
   const [user, setUser] = useState(undefined);
   useEffect(() => { getUser().then((u) => setUser(u ?? null)); }, []);
-  if (user === undefined) return <div className="admin" />;
+  if (user === undefined) {
+    return (
+      <div style={{ minHeight: '100vh', display: 'grid', placeItems: 'center', background: 'var(--ink)', color: '#fff', fontSize: 16 }}>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12 }}>
+          <img src="/images/logo.png" alt="Safal Vidyalaya" style={{ height: 48, width: 'auto', opacity: 0.9 }} />
+          <span style={{ opacity: 0.7 }}>Loading admin portal…</span>
+        </div>
+      </div>
+    );
+  }
   if (!user) return <Login onIn={setUser} />;
   return <Dashboard user={user} onOut={async () => { await signOut(); setUser(null); }} />;
 }
