@@ -17,7 +17,8 @@
 
 This repository houses the complete engineering and design overhaul of the school’s web presence. What originated as an unmaintained, generic brochure template has been transformed into a **production-ready, full-stack digital campus**. It pairs a high-polish, classroom-grounded aesthetic with robust admissions tracking, team onboarding tools, and a zero-maintenance, 100% free-tier cloud architecture.
 
-- **Production URL:** [https://safal-six.vercel.app/](https://safal-six.vercel.app/)
+- **Live Redesign (Production):** [https://safal-six.vercel.app/](https://safal-six.vercel.app/)
+- **Original Legacy Website:** [https://www.safalvidhyalaya.com/](https://www.safalvidhyalaya.com/)
 - **Repository:** [https://github.com/Devarsh-44/safal](https://github.com/Devarsh-44/safal)
 - **Primary Stakeholders:** Prospective parents, current school families, academic job seekers, and school administration staff.
 
@@ -25,44 +26,51 @@ This repository houses the complete engineering and design overhaul of the schoo
 
 ## 🔄 What Changed from the Old Site? (Evolution & Comparison)
 
-The redesign is not merely a superficial coat of paint; it is an architectural and conceptual evolution. The project was subjected to multiple design critiques and iterative refactors (progressing through v1, v2 experiments, and landing on the finalized v3 system) to eliminate superficial gimmicks in favor of authentic school storytelling and high-performance engineering.
+The redesign is not merely a superficial coat of paint; it is a ground-up architectural, UX, and branding transformation from the school's legacy website ([safalvidhyalaya.com](https://www.safalvidhyalaya.com/)). The project was developed through iterative user feedback and architectural refactoring to eliminate vendor template bloat, fragmented navigation, and superficial gimmicks in favor of authentic school storytelling and high-performance engineering.
 
-### At a Glance: Old vs. New
+### At a Glance: Old ([safalvidhyalaya.com](https://www.safalvidhyalaya.com/)) vs. New ([safal-six.vercel.app](https://safal-six.vercel.app/))
 
-| Dimension | Legacy / Old Template (v1 & v2 Explorations) | New Production Redesign (v3: "The Margin") |
+| Dimension | Original Legacy Website ([safalvidhyalaya.com](https://www.safalvidhyalaya.com/)) | New Production Redesign (v3: "The Margin") |
 | :--- | :--- | :--- |
-| **Brand Concept** | Generic corporate school template; later weighed down by dark cinematic gimmicks (film reel preloader, letterbox bars, blinking REC dots, timecodes). | **"The Margin"**: Authentic notebook metaphor. Ruled lines, margin notes, and hand-drawn teacher marks that physically draw as you read. |
-| **Localization** | Monolingual English only; completely excluded non-English speaking local parents. | **Deep Trilingual Parity**: Seamless, instant switching between **English**, **Gujarati (ગુજરાતી)**, and **Hindi (हिन्दी)** across all 8 pages. |
-| **Typography** | Generic system fonts (`Arial`, `Roboto`) with poor Indic script rendering. | Hand-tailored multi-script hierarchy: **Young Serif**, **Figtree**, **Caveat** (handwritten), and **Baloo Bhai 2 / Baloo 2** for native Indic typography. |
-| **Data & Backend** | Static HTML/JS. Form submissions saved to temporary browser memory or sent to non-existent mailers. | **Full-Stack Supabase Cloud**: Real-time PostgreSQL database, Row Level Security (RLS), and automated timestamp tracking. |
-| **Document Storage** | No upload capabilities. Parents had to travel to campus to hand over physical certificates and marksheets. | **Encrypted Cloud Storage**: Private buckets (`admission-docs`, `resumes`) generating time-limited signed URLs for zero-leak document inspection. |
-| **Staff & Admin CRM** | No administrative capabilities; admissions tracked in paper registers or scattered WhatsApp chats. | **Integrated Staff CRM (`/admin`)**: Real-time lead management, application filtering, news publishing, and one-click WhatsApp parent outreach. |
-| **Staff Onboarding** | Manual account management requiring technical database access. | **In-Admin Team Onboarding**: Staff account provisioning, magic invitation links, and WhatsApp team-join sharing via secure server route handlers. |
-| **Mobile Performance** | Janky 1:1 scroll listeners and bloated JS animation libraries causing frame drops on budget smartphones. | **60 FPS Hardware Acceleration**: Zero animation libraries on public routes. Native CSS custom properties and RAF-eased scroll physics. |
-| **Deployment Mode** | Fragile local setup; broken when database keys were absent. | **Hybrid Architecture**: Operates in zero-config offline demo mode (`localStorage`) and auto-promotes to Supabase cloud when keys are provisioned. |
+| **Brand Concept & Identity** | Generic agency IT template (Nuxt.js / Unity Infoway) with corporate blues (`#0054a5`), harsh oranges (`#f37021`), and repetitive wavy SVG dividers. | **"The Margin"**: Authentic classroom notebook metaphor. Ruled lines, margin notes, and hand-drawn teacher marks that physically draw as you read. |
+| **Site Navigation & UX** | **Bloated, fragmented 20+ sub-pages** (`/why-safal`, `/syllabus`, `/child-assessment`, `/academic-planner`, `/clubs`, `/facilities`, etc.) forcing parents through deep, confusing nested menus. | **Consolidated 8-Chapter Architecture**: Every aspect of campus life, academics, and admissions is organized into 8 intuitive, single-scroll narrative chapters. |
+| **First Load & Preloader** | Heavy blocking preloader overlay with a full-screen blurred backdrop and continuous SVG pencil loop that delayed reading content. | **Instant Content-First Delivery**: Zero blocking splash screens. Content renders immediately; soft notebook page transition and subtle SVG ink drawing on scroll. |
+| **Localization & Inclusivity** | Monolingual English only; completely unreadable for non-English speaking local Gujarati and Hindi parents. | **Deep Trilingual Parity**: Seamless, instant switching between **English**, **Gujarati (ગુજરાતી)**, and **Hindi (हिन्दी)** across all 8 pages. |
+| **Typography** | Generic system sans-serif fonts with poor Indic script rendering and uneven baseline heights. | Hand-tailored multi-script hierarchy: **Young Serif**, **Figtree**, **Caveat** (handwritten), and **Baloo Bhai 2 / Baloo 2** for native Indic typography. |
+| **Admissions & Forms** | Static contact inputs ("Drop A Line") and disjointed `/online-admission-form` that mailed into unmonitored inboxes or lost leads. | **Automated Full-Stack CRM**: Structured Supabase PostgreSQL tables, instant status pipelines (`New`, `Contacted`, `Enrolled`), and live lead metrics. |
+| **Document Storage** | No file upload capabilities. Parents had to travel to campus to hand over physical certificates and marksheets. | **Encrypted Cloud Storage**: Private buckets (`admission-docs`, `resumes`) generating time-limited signed URLs for zero-leak document inspection. |
+| **Parent Outreach** | Static WhatsApp button with generic pre-filled text ("Hi, I would like to know more about your services!"). | **Dynamic Contextual Outreach**: One-click direct calling, emailing, and dynamic WhatsApp message generation pre-filled with the student's name and grade. |
+| **Staff & Admin Management** | Non-existent; admissions tracked in physical registers, paper files, or scattered teacher WhatsApp groups. | **Integrated Staff CRM (`/admin`)**: Real-time lead management, application filtering, news publishing, and team member provisioning. |
+| **Staff Onboarding** | Required direct database intervention by an engineer to add or invite new faculty members. | **In-Admin Team Onboarding**: Staff account provisioning, magic invitation links, and WhatsApp team-join sharing via secure server route handlers. |
+| **Performance & Bundle** | Heavy JS runtime and unoptimized media assets causing frame drops and long load times on budget 4G smartphones. | **60 FPS Hardware Acceleration**: Zero animation libraries on public routes. Native CSS custom properties and RAF-eased scroll physics. |
+| **Deployment Mode** | Fragile vendor-hosted setup with hardcoded configurations. | **Hybrid Architecture**: Operates in zero-config offline demo mode (`localStorage`) and auto-promotes to Supabase cloud when keys are provisioned. |
 
 ---
 
 ### Detailed Transformation Breakdown
 
-#### 1. From Artificial Gimmicks to Authentic Storytelling ("The Margin")
-- **The Problem with the Old Approach:** Early iterations attempted to look "premium" by borrowing cinematic cues—letterbox overlays, camera timecodes, dark brooding palettes, and custom cursor animations. Feedback made the flaw obvious: *cinematic overlays belong to film studios, not a K–12 school in Gandhinagar*.
+#### 1. From a Cluttered 20+ Page Maze to an Intuitive 8-Chapter Story
+- **The Problem with the Old Site:** The original [safalvidhyalaya.com](https://www.safalvidhyalaya.com/) fragmented basic school information across more than 20 separate URLs (`/why-safal`, `/vision-mission-and-core-value`, `/syllabus`, `/child-assessment`, `/academic-regulations`, `/examination-schedule`, `/evaluation-system`, `/academic-planner`, `/co-curricular-activities`, `/facilities`, etc.). Prospective parents had to click through multiple levels of nested menus just to learn about the curriculum or find out how to enroll their child.
+- **The Solution:** The redesign unifies these fragmented pages into **8 cohesive narrative chapters** (p. 1 through p. 8). Crucial information—such as curriculum stages, student-teacher ratios, and facility walkthroughs—is brought together in clear, scannable layouts where "Apply Now" is never more than one click away.
+
+#### 2. From Artificial Vendor Gimmicks to Authentic School Soul ("The Margin")
+- **The Problem with the Old Site:** The legacy website used an agency template packed with generic IT agency aesthetics—harsh saturated blues (`#0054a5`), electric oranges (`#f37021`), generic wave dividers, and a full-screen blurred pencil loader that blocked the screen on entry.
 - **The Solution:** The v3 concept roots itself in the physical classroom. Every student in India remembers the red margin line of their school notebook, where teachers inscribed stars, ticks, and encouraging notes. The website replicates a crisp ruled page (`--paper` and `--rule`), bordered by the red margin line (`--pen`), with animated SVG marks (squiggles, circles, double-underlines, stars) that draw themselves as parents scroll through achievements and curriculums.
 
-#### 2. Full Trilingual Support (English · ગુજરાતી · हिन्दी)
-- **The Problem with the Old Approach:** More than 70% of prospective parents in Gandhinagar and surrounding districts are most comfortable reviewing academic curriculums and admission requirements in Gujarati or Hindi. The old site was exclusively English.
+#### 3. Full Trilingual Support (English · ગુજરાતી · हिन्दी)
+- **The Problem with the Old Site:** Even though Safal Vidyalaya operates in Sector 22, Gandhinagar, and educates both English and Gujarati medium students, the original website was exclusively in English. Over 70% of prospective families in the local area prefer evaluating academic details and admission guidelines in Gujarati or Hindi.
 - **The Solution:** Built a lightweight, zero-latency localization dictionary (`src/lib/v3Strings.js`). Every heading, badge, label, and form placeholder is localized with cultural nuance. Typography adapts dynamically so Gujarati and Hindi scripts render with balanced line heights and legible ascenders/descenders.
 
-#### 3. Lead Capture to Automated Cloud CRM
-- **The Problem with the Old Approach:** When parents submitted an enquiry on the old site, the data either disappeared or triggered an unmaintained mailer that frequently landed in spam folders. Admissions staff had zero visibility into conversion rates.
+#### 4. Lead Capture to Automated Cloud CRM
+- **The Problem with the Old Site:** Contact submissions from the old "Drop A Line" form were sent via standard email, often landing in spam or sitting unread for weeks. Admissions staff had zero visibility into enquiry pipelines or conversion rates.
 - **The Solution:** Integrated a production-grade Supabase database. Admissions enquiries, contact messages, and career applications are instantly ingested into structured tables (`enquiries`, `messages`, `applications`). The staff dashboard (`/admin`) allows the admissions team to:
   - Triage leads by status: `New`, `Contacted`, `Enrolled`, `Archived`.
   - Filter applicants by grade level (Primary, Secondary, Higher Secondary).
   - Open instant, prefilled WhatsApp conversations with parents with one click.
   - Download uploaded student marksheets, birth certificates, and teacher CVs via secure, authenticated signed URLs.
 
-#### 4. Team Onboarding & Multi-User Staff Access
-- **The Problem with the Old Approach:** Only a single developer could manage portal credentials by manually altering database records.
+#### 5. Team Onboarding & Multi-User Staff Access
+- **The Problem with the Old Site:** There was no portal or role-based access for school staff; all enquiries were scattered across physical papers or individual teachers' phones.
 - **The Solution:** Developed an administrative onboarding suite:
   - Accessible via discrete, tasteful "Staff Login" buttons embedded in the header and footer.
   - Staff can be provisioned directly from the admin panel using Next.js server route handlers (`/api/admin/staff`) protected by `SUPABASE_SERVICE_ROLE_KEY`.
