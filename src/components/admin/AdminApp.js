@@ -3,7 +3,17 @@ import Link from 'next/link';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import Icon from '../Icons';
-import { isLive, DEMO_ADMIN, signIn, signOut, getUser, listTable, updateRow, listNews, createNews, updateNews, deleteNews } from '@/lib/store';
+import { isLive, DEMO_ADMIN, signIn, signOut, getUser, listTable, updateRow, listNews, createNews, updateNews, deleteNews, getFileUrl } from '@/lib/store';
+
+async function openFile(bucket, path) {
+  if (!path) return;
+  const url = await getFileUrl(bucket, path);
+  if (url) {
+    window.open(url, '_blank', 'noopener,noreferrer');
+  } else {
+    alert(isLive ? 'Could not generate download link for file.' : 'Demo mode: file is stored as placeholder reference (' + path + '). Live storage requires Supabase keys.');
+  }
+}
 
 const STATUSES = ['New', 'Called', 'Visit booked', 'Admitted', 'Closed'];
 const statusClass = (s) => 's-' + (s || 'New').split(' ')[0];
@@ -183,9 +193,31 @@ function Enquiries({ rows, loading, reload }) {
                 <button className="burger" style={{ display: 'inline-flex' }} onClick={() => setSelId(null)} aria-label="Close"><Icon name="close" size={18} /></button>
               </div>
               <dl style={{ margin: '20px 0', display: 'grid', gap: 12 }}>
-                {[['Parent', sel.parent_name + (sel.relation ? ` (${sel.relation})` : '')], ['Mobile', sel.phone], ['Email', sel.email], ['Date of birth', sel.dob], ['Received', new Date(sel.created_at).toLocaleString('en-IN')],
-                  ['Documents', sel.docs && Object.keys(sel.docs).length ? Object.values(sel.docs).join(', ') : 'None yet']]
+                {[['Parent', sel.parent_name + (sel.relation ? ` (${sel.relation})` : '')], ['Mobile', sel.phone], ['Email', sel.email], ['Date of birth', sel.dob], ['Received', new Date(sel.created_at).toLocaleString('en-IN')]]
                   .filter(([, v]) => v).map(([k, v]) => <div key={k}><dt className="muted" style={{ fontSize: 13 }}>{k}</dt><dd style={{ margin: 0, fontWeight: 600, overflowWrap: 'anywhere' }}>{v}</dd></div>)}
+                <div>
+                  <dt className="muted" style={{ fontSize: 13, marginBottom: 4 }}>Documents</dt>
+                  <dd style={{ margin: 0 }}>
+                    {sel.docs && Object.keys(sel.docs).length > 0 ? (
+                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
+                        {Object.entries(sel.docs).map(([docType, filePath]) => (
+                          <button
+                            key={docType}
+                            type="button"
+                            className="btn btn-ghost"
+                            style={{ minHeight: 32, padding: '4px 10px', fontSize: 13 }}
+                            onClick={() => openFile('admission-docs', filePath)}
+                            title={`Open ${filePath}`}
+                          >
+                            📄 {docType.replace(/_/g, ' ')} ↗
+                          </button>
+                        ))}
+                      </div>
+                    ) : (
+                      <span className="muted" style={{ fontSize: 13 }}>None yet</span>
+                    )}
+                  </dd>
+                </div>
               </dl>
               <p style={{ fontWeight: 700, margin: '0 0 8px' }}>Move to</p>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0,1fr))', gap: 8 }}>
@@ -239,7 +271,21 @@ function Applications({ rows, reload }) {
                 <tr key={a.id}>
                   <td><b>{a.name}</b><span className="muted" style={{ display: 'block', fontSize: 13 }}>{a.phone} · {a.email}</span></td>
                   <td>{a.subject}</td><td>{a.experience}</td><td>{a.qualification}</td>
-                  <td className="muted" style={{ maxWidth: 160, overflowWrap: 'anywhere' }}>{a.resume_path}</td>
+                  <td style={{ maxWidth: 160 }}>
+                    {a.resume_path ? (
+                      <button
+                        type="button"
+                        className="btn btn-ghost"
+                        style={{ minHeight: 30, padding: '2px 10px', fontSize: 13 }}
+                        onClick={() => openFile('resumes', a.resume_path)}
+                        title={a.resume_path}
+                      >
+                        📄 View CV ↗
+                      </button>
+                    ) : (
+                      <span className="muted">—</span>
+                    )}
+                  </td>
                   <td className="muted">{ago(a.created_at)}</td>
                   <td>
                     <select value={a.status} aria-label="Status" onChange={async (e) => { await updateRow('applications', a.id, { status: e.target.value }); reload(); }} style={{ padding: '6px 8px', borderRadius: 8, border: '1.5px solid var(--line-2)' }}>

@@ -66,6 +66,18 @@ export async function uploadFile(bucket, file) {
   return path;
 }
 
+/** Returns a temporary signed URL (valid 1 hour) to view/download private files from Supabase Storage. */
+export async function getFileUrl(bucket, path) {
+  if (!path) return null;
+  if (!isLive) return null;
+  const { data, error } = await supabase.storage.from(bucket).createSignedUrl(path, 3600);
+  if (error) {
+    console.error('Error getting signed url for ' + path, error);
+    return null;
+  }
+  return data?.signedUrl || null;
+}
+
 /* ---------- News ---------- */
 
 export async function listNews({ includeDrafts = false } = {}) {

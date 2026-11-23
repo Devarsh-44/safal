@@ -68,22 +68,41 @@ alter table public.messages    enable row level security;
 alter table public.applications enable row level security;
 alter table public.news        enable row level security;
 
+drop policy if exists "public can submit enquiries"     on public.enquiries;
 create policy "public can submit enquiries"     on public.enquiries    for insert to anon, authenticated with check (true);
+
+drop policy if exists "public can submit messages"      on public.messages;
 create policy "public can submit messages"      on public.messages     for insert to anon, authenticated with check (true);
+
+drop policy if exists "public can submit applications"  on public.applications;
 create policy "public can submit applications"  on public.applications for insert to anon, authenticated with check (true);
+
+drop policy if exists "public can read published news"  on public.news;
 create policy "public can read published news"  on public.news         for select to anon using (published = true);
 
+drop policy if exists "staff full access enquiries"    on public.enquiries;
 create policy "staff full access enquiries"    on public.enquiries    for all to authenticated using (true) with check (true);
+
+drop policy if exists "staff full access messages"     on public.messages;
 create policy "staff full access messages"     on public.messages     for all to authenticated using (true) with check (true);
+
+drop policy if exists "staff full access applications" on public.applications;
 create policy "staff full access applications" on public.applications for all to authenticated using (true) with check (true);
+
+drop policy if exists "staff full access news"         on public.news;
 create policy "staff full access news"         on public.news         for all to authenticated using (true) with check (true);
 
 -- ========== Storage (uploads) ==========
 insert into storage.buckets (id, name, public) values ('admission-docs', 'admission-docs', false) on conflict do nothing;
 insert into storage.buckets (id, name, public) values ('resumes', 'resumes', false) on conflict do nothing;
 
+drop policy if exists "public can upload admission docs" on storage.objects;
 create policy "public can upload admission docs" on storage.objects for insert to anon, authenticated with check (bucket_id = 'admission-docs');
+
+drop policy if exists "public can upload resumes"        on storage.objects;
 create policy "public can upload resumes"        on storage.objects for insert to anon, authenticated with check (bucket_id = 'resumes');
+
+drop policy if exists "staff can read uploads"           on storage.objects;
 create policy "staff can read uploads"           on storage.objects for select to authenticated using (bucket_id in ('admission-docs', 'resumes'));
 
 -- ========== Seed news ==========
