@@ -57,6 +57,9 @@ export default function Header() {
           {v.nav.map(([href, label]) => <Link key={href} className="lnk" href={href} aria-current={current(href)}>{label}</Link>)}
           <Langs />
           <Link className="btn btn-apply" href={APPLY_HREF}>{v.apply}</Link>
+          <Link href="/admin" className="lnk staff-lnk" title={v.footer?.staff || 'Staff Login'} style={{ fontSize: 13, fontWeight: 600, opacity: 0.85, padding: '8px 12px' }}>
+            {v.footer?.staff || 'Staff'}
+          </Link>
           <button className="menu-btn" type="button" aria-expanded={open} onClick={() => setOpen(true)}>{v.menu}</button>
         </nav>
       </header>
@@ -66,7 +69,12 @@ export default function Header() {
           <Link href="/" onClick={() => setOpen(false)}>{v.home}</Link>
           {v.nav.map(([href, label]) => <Link key={href} href={href} onClick={() => setOpen(false)}>{label}</Link>)}
           <Link href={APPLY_HREF} onClick={() => setOpen(false)} style={{ color: 'var(--saffron-ink)' }}>{v.apply}</Link>
-          <Langs />
+          <div style={{ marginTop: 20, paddingTop: 16, borderTop: '1px solid var(--rule)', display: 'flex', flexDirection: 'column', gap: 14 }}>
+            <Link href="/admin" onClick={() => setOpen(false)} className="btn btn-ink" style={{ width: 'fit-content', padding: '10px 20px', borderRadius: 999, fontSize: 15 }}>
+              🔒 {v.footer?.staff || 'Staff Login'} →
+            </Link>
+            <Langs />
+          </div>
         </div>
       )}
     </>
