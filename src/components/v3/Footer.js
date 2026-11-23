@@ -1,4 +1,5 @@
 'use client';
+import Link from 'next/link';
 import { useLang, pick } from '@/lib/i18n';
 import { school } from '@/lib/content';
 import { sampleCredits } from '@/lib/media';
@@ -32,11 +33,12 @@ export default function Footer() {
               <h3>{t.v3.menu}</h3>
               {t.v3.nav.map(([href, label]) => <a key={href} href={href}>{label}</a>)}
               <a href={APPLY_HREF}>{t.v3.apply}</a>
+              <Link href="/admin" style={{ opacity: 0.9 }}>🔒 {v.staff}</Link>
               <a href="#top">{v.top} ↑</a>
             </div>
           </div>
           <div className="fine">
-            <span>{v.rights} · {school.affiliation} · <a className="staff" href="/admin" rel="nofollow">{v.staff}</a></span>
+            <span>{v.rights} · {school.affiliation} · <Link className="staff" href="/admin" rel="nofollow" style={{ fontWeight: 600, color: 'var(--marigold)' }}>🔒 {v.staff}</Link></span>
             <details>
               <summary>{v.credits}</summary>
               <p style={{ marginTop: 8 }}>{v.samples}</p>
