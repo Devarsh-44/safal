@@ -294,20 +294,7 @@ SUPABASE_SERVICE_ROLE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
 
 ---
 
-## 🚢 Deployment Guide (Vercel)
 
-1. **Push your code to GitHub:**
-   Ensure `.env.local` is listed in `.gitignore` (already configured).
-2. **Import into Vercel:**
-   - Link your GitHub repository at [vercel.com](https://vercel.com).
-   - Set **Root Directory** to `safal-vidyalaya`.
-   - Framework preset will automatically detect **Next.js**.
-3. **Configure Environment Variables in Vercel:**
-   - Add `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `NEXT_PUBLIC_SCHOOL_PHONE`, and `NEXT_PUBLIC_SCHOOL_WHATSAPP` as **Plaintext / Config**.
-   - Add `SUPABASE_SERVICE_ROLE_KEY` as **Secret / Encrypted**.
-4. **Deploy:** Click **Deploy**. Vercel will pre-render all static routes and deploy edge API handlers globally.
-
----
 
 ## 📂 Project Structure
 
@@ -351,27 +338,12 @@ safal-vidyalaya/
 │   └── schema.sql              # Complete PostgreSQL schema, RLS policies, and seed data
 └── README.md                   # Project documentation and architectural overview
 ```
-
----
-
-## 🗺️ Roadmap & Handoff Milestones
-
-- [x] Complete trilingual dictionary integration (English, Gujarati, Hindi).
-- [x] Implement "The Margin" notebook design system with hardware-accelerated motion.
-- [x] Connect live Supabase PostgreSQL database and Row-Level Security.
-- [x] Configure private cloud storage buckets with signed-URL document retrieval.
-- [x] Develop Admissions CRM with status triage and one-click WhatsApp messaging.
-- [x] Build in-admin staff invitation and credential provisioning suite.
-- [x] Deploy to production on Vercel with zero-secret build isolation.
-- [ ] Incorporate finalized high-resolution campus drone photography and faculty portraits.
-- [ ] Parent Portal (Phase 2): Attendance tracking, circulars, and fee receipt downloads.
-
 ---
 
 ## 📄 License & Credits
 
 - **Institution:** Safal Vidyalaya, Sector 22, Gandhinagar, Gujarat.
 - **Affiliation:** Gujarat Pradesh Vidyabharti.
-- **Design & Engineering:** Developed as a comprehensive UI/UX case study and full-stack implementation by [Devarsh Patel](https://github.com/Devarsh-44).
+- **Design & Engineering:** Developed as a comprehensive UI/UX case study and full-stack implementation by [Devarsh Kotak](https://github.com/Devarsh-44).
 - **Inspiration:** Handcrafted notebook motifs, 21oaks design concepts, and modern editorial micro-interactions.
 - **License:** MIT License. Free for educational and open-source adaptation.
