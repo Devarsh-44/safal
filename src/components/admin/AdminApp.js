@@ -93,6 +93,7 @@ function Dashboard({ user, onOut }) {
     ['messages', 'Messages', data.messages.filter((m) => !m.handled).length],
     ['applications', 'Job applications', data.applications.filter((a) => a.status === 'New').length],
     ['news', 'News & events', 0],
+    ['staff', 'Staff accounts', 0],
   ];
 
   return (
@@ -119,6 +120,7 @@ function Dashboard({ user, onOut }) {
               {tab === 'messages' && <Messages rows={data.messages} reload={load} />}
               {tab === 'applications' && <Applications rows={data.applications} reload={load} />}
               {tab === 'news' && <NewsAdmin />}
+              {tab === 'staff' && <StaffAdmin currentEmail={user.email} />}
             </motion.div>
           </AnimatePresence>
         </div>
@@ -370,6 +372,181 @@ function NewsAdmin() {
           ))}
         </AnimatePresence>
       </div>
+    </>
+  );
+}
+
+function StaffAdmin({ currentEmail }) {
+  const [staffList, setStaffList] = useState([]);
+  const [configured, setConfigured] = useState(true);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [busy, setBusy] = useState(false);
+  const [msg, setMsg] = useState('');
+  const [err, setErr] = useState('');
+  const [copied, setCopied] = useState(false);
+
+  const adminUrl = typeof window !== 'undefined' ? `${window.location.origin}/admin` : '/admin';
+
+  const loadStaff = useCallback(async () => {
+    try {
+      const res = await fetch('/api/admin/staff');
+      const d = await res.json();
+      setConfigured(d.configured !== false);
+      if (d.users) setStaffList(d.users);
+    } catch {
+      setConfigured(false);
+    }
+  }, []);
+
+  useEffect(() => { loadStaff(); }, [loadStaff]);
+
+  const copyLoginLink = () => {
+    try {
+      navigator.clipboard.writeText(adminUrl);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2500);
+    } catch {}
+  };
+
+  async function handleCreate(e) {
+    e.preventDefault();
+    setBusy(true); setMsg(''); setErr('');
+    try {
+      const res = await fetch('/api/admin/staff', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password, action: 'create' }),
+      });
+      const d = await res.json();
+      if (!res.ok) throw new Error(d.error || 'Failed to create account');
+      setMsg(`Staff account created for ${email}!`);
+      setEmail(''); setPassword('');
+      loadStaff();
+    } catch (e2) {
+      setErr(e2.message);
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  async function handleInvite(e) {
+    e.preventDefault();
+    if (!email) { setErr('Please enter staff email first.'); return; }
+    setBusy(true); setMsg(''); setErr('');
+    try {
+      const res = await fetch('/api/admin/staff', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, action: 'invite' }),
+      });
+      const d = await res.json();
+      if (!res.ok) throw new Error(d.error || 'Failed to send invite');
+      setMsg(d.message || 'Invitation email sent successfully!');
+      setEmail('');
+      loadStaff();
+    } catch (e2) {
+      setErr(e2.message);
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  const waShareText = `Namaste! Here is your login link for the Safal Vidyalaya Staff Portal: ${adminUrl}`;
+
+  return (
+    <>
+      <Head title="Staff team & access" sub="Invite teachers and administrators to manage admissions" />
+
+      {/* Shareable Link Card */}
+      <div className="card" style={{ padding: 22, borderRadius: 16, marginBottom: 20 }}>
+        <h3 style={{ margin: '0 0 8px', fontSize: 18 }}>Direct Link for Staff</h3>
+        <p className="muted" style={{ margin: '0 0 14px', fontSize: 14 }}>
+          Send this link to any teacher or staff member. They will see the staff login screen.
+        </p>
+        <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', alignItems: 'center' }}>
+          <input
+            readOnly
+            value={adminUrl}
+            style={{ flex: '1 1 280px', padding: '10px 14px', borderRadius: 10, border: '1.5px solid var(--line-2)', background: 'var(--mist)' }}
+          />
+          <button type="button" className="btn btn-dark" onClick={copyLoginLink}>
+            {copied ? '✓ Link Copied!' : 'Copy Portal Link'}
+          </button>
+          <a
+            className="btn btn-primary"
+            style={{ background: 'var(--green)' }}
+            href={`https://wa.me/?text=${encodeURIComponent(waShareText)}`}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <Icon name="whatsapp" />Share via WhatsApp
+          </a>
+        </div>
+      </div>
+
+      {/* Account Creation or Supabase Instructions */}
+      <div className="card" style={{ padding: 22, borderRadius: 16, marginBottom: 20 }}>
+        <h3 style={{ margin: '0 0 8px', fontSize: 18 }}>Add or Invite a Staff Member</h3>
+
+        {configured ? (
+          <form onSubmit={handleCreate} style={{ display: 'grid', gap: 14, maxWidth: 520, marginTop: 12 }}>
+            <label className="field">Staff Email
+              <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="teacher@safalvidhyalaya.com" required />
+            </label>
+            <label className="field">Initial Password
+              <input type="text" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="e.g. Safal2026!" />
+            </label>
+            {msg && <p style={{ color: 'var(--green)', margin: 0, fontWeight: 600 }}>{msg}</p>}
+            {err && <p className="form-error" style={{ margin: 0 }}>{err}</p>}
+            <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
+              <button className="btn btn-dark" disabled={busy || !password}>
+                {busy ? 'Creating…' : 'Create Staff Account'}
+              </button>
+              <button type="button" className="btn btn-ghost" disabled={busy} onClick={handleInvite}>
+                Send Email Invite Link Instead
+              </button>
+            </div>
+          </form>
+        ) : (
+          <div style={{ marginTop: 12, display: 'grid', gap: 12 }}>
+            <p style={{ margin: 0, lineHeight: 1.6 }}>
+              You can add staff in <b>30 seconds</b> from your free Supabase Dashboard:
+            </p>
+            <ol style={{ margin: 0, paddingLeft: 20, display: 'grid', gap: 8, fontSize: 14 }}>
+              <li>Open your project at <b>supabase.com</b> → <b>Authentication</b> → <b>Users</b>.</li>
+              <li>Click <b>Add user</b> → <b>Create user</b> (type email + temporary password) OR <b>Send invite</b> (sends them an activation email).</li>
+              <li>Then send them your portal link above!</li>
+            </ol>
+            <div style={{ marginTop: 8, padding: 12, background: 'var(--mist)', borderRadius: 10, fontSize: 13, color: 'var(--slate)' }}>
+              💡 <i>Pro tip: To create accounts directly from this form without opening Supabase, add <code>SUPABASE_SERVICE_ROLE_KEY</code> into your <code>.env.local</code>.</i>
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* Current Team */}
+      {staffList.length > 0 && (
+        <div className="card" style={{ borderRadius: 16, overflow: 'hidden' }}>
+          <div style={{ padding: '16px 20px', borderBottom: '1px solid var(--line)', fontWeight: 700 }}>
+            Registered Staff ({staffList.length})
+          </div>
+          <div className="table-wrap">
+            <table className="data">
+              <thead><tr><th>Email</th><th>Created</th><th>Last Login</th></tr></thead>
+              <tbody>
+                {staffList.map((u) => (
+                  <tr key={u.id}>
+                    <td><b>{u.email}</b> {u.email === currentEmail && <span style={{ fontSize: 12, color: 'var(--slate)' }}>(you)</span>}</td>
+                    <td className="muted">{ago(u.created_at)}</td>
+                    <td className="muted">{u.last_sign_in_at ? ago(u.last_sign_in_at) : 'Not yet'}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
     </>
   );
 }
