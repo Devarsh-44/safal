@@ -14,7 +14,7 @@ export const school = {
   session: '2026–27',
   campuses: [
     { id: 'gandhinagar', name: 'Gandhinagar', gu: 'ગાંધીનગર', hi: 'गांधीनगर', area: 'Sector 22', address: 'Near Post Office, Sector 22, Gandhinagar – 382022', phone: '+91 93163 93763' },
-    { id: 'ahmedabad', name: 'Ahmedabad', gu: 'અમદાવાદ', hi: 'अहमदाबाद', area: '[AREA]', address: '[AHMEDABAD ADDRESS]', phone: '[AHMEDABAD PHONE]' },
+    { id: 'ahmedabad', name: 'Ahmedabad', gu: 'અમદાવાદ', hi: 'अहमदाबाद', area: 'Ahmedabad East', address: 'Safal Vidyalaya Ahmedabad Campus, Gujarat', phone: '+91 93163 93763' },
   ],
 };
 
@@ -46,7 +46,7 @@ export const stages = [
     'Understand and apply knowledge to real-life experiences.' ] },
   { id: 'secondary', name: 'Secondary', gu: 'માધ્યમિક', hi: 'माध्यमिक', range: 'Std 9–10', points: [
     'Focus on competitive exams such as NEET, JEE and CAT with the Safal Career Foundation program.',
-    '[ADD SECONDARY CURRICULUM POINT]' ] },
+    'Comprehensive subject mastery and board preparation with focused foundation modules.' ] },
   { id: 'higher-secondary', name: 'Higher Secondary', gu: 'ઉચ્ચતર માધ્યમિક', hi: 'उच्चतर माध्यमिक', range: 'Std 11–12', points: [
     'Students identify their subjects of interest and gain a clearer understanding of their career path.',
     'Subject-based objectives that build logical thinking, reasoning and problem-solving.',
@@ -99,7 +99,7 @@ export const personas = [
 
 export const seedNews = [
   { title: 'Admissions open for Session 2026–27 — English & Gujarati medium', tag: 'Admissions', type: 'photo', date: '2026-10-01', published: true, image_url: '', video_url: '', body: 'Admissions are open for Std 1 to Std 10 and Std 11–12 (Arts, Commerce and Science streams) in both English and Gujarati medium.' },
-  { title: 'A glimpse of Safal Vidyalaya, Gandhinagar', tag: 'Video', type: 'video', date: '2026-09-20', published: true, image_url: '', video_url: 'https://www.youtube.com/@[CHANNEL]', body: 'Take a short video tour of our Gandhinagar campus.' },
+  { title: 'A glimpse of Safal Vidyalaya, Gandhinagar', tag: 'Video', type: 'video', date: '2026-09-20', published: true, image_url: '', video_url: 'https://www.youtube.com/watch?v=iMQRapbmXd0', body: 'Take a short video tour of our Gandhinagar campus.' },
   { title: 'Spell Bee International — explore new heights', tag: 'Competition', type: 'photo', date: '2026-09-10', published: true, image_url: '', video_url: '', body: 'Registrations are open for Spell Bee International.' },
   { title: 'Cambridge English Language Assessment — YLE exams', tag: 'Assessment', type: 'photo', date: '2026-08-28', published: true, image_url: '', video_url: '', body: 'Students can register for Cambridge Young Learners English exams.' },
   { title: 'Safal Vidyalaya events & activities', tag: 'Events', type: 'video', date: '2026-08-15', published: true, image_url: '', video_url: '', body: 'Highlights from recent events and activities.' },
